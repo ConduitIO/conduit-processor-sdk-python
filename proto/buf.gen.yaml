@@ -1,0 +1,6 @@
+version: v2
+plugins:
+  - remote: buf.build/protocolbuffers/python:v31.1
+    out: .
+  - remote: buf.build/protocolbuffers/pyi:v31.1
+    out: .

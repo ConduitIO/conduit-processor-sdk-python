@@ -1,0 +1,19 @@
+from google.protobuf import descriptor_pb2 as _descriptor_pb2
+from google.protobuf import descriptor as _descriptor
+from typing import ClassVar as _ClassVar
+
+DESCRIPTOR: _descriptor.FileDescriptor
+METADATA_CONDUIT_SOURCE_PLUGIN_NAME_FIELD_NUMBER: _ClassVar[int]
+metadata_conduit_source_plugin_name: _descriptor.FieldDescriptor
+METADATA_CONDUIT_SOURCE_PLUGIN_VERSION_FIELD_NUMBER: _ClassVar[int]
+metadata_conduit_source_plugin_version: _descriptor.FieldDescriptor
+METADATA_CONDUIT_DESTINATION_PLUGIN_NAME_FIELD_NUMBER: _ClassVar[int]
+metadata_conduit_destination_plugin_name: _descriptor.FieldDescriptor
+METADATA_CONDUIT_DESTINATION_PLUGIN_VERSION_FIELD_NUMBER: _ClassVar[int]
+metadata_conduit_destination_plugin_version: _descriptor.FieldDescriptor
+METADATA_CONDUIT_SOURCE_CONNECTOR_ID_FIELD_NUMBER: _ClassVar[int]
+metadata_conduit_source_connector_id: _descriptor.FieldDescriptor
+METADATA_CONDUIT_DLQ_NACK_ERROR_FIELD_NUMBER: _ClassVar[int]
+metadata_conduit_dlq_nack_error: _descriptor.FieldDescriptor
+METADATA_CONDUIT_DLQ_NACK_NODE_ID_FIELD_NUMBER: _ClassVar[int]
+metadata_conduit_dlq_nack_node_id: _descriptor.FieldDescriptor
