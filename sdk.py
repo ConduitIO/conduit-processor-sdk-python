@@ -1,7 +1,6 @@
 # sdk.py
 from typing import Dict, Optional, List
 
-# No more sys.path manipulation here.
 # Direct imports are used because the entry point script fixes the path.
 from processor.v1 import processor_pb2
 from opencdc.v1 import opencdc_pb2
@@ -21,10 +20,26 @@ def _malloc(size):
 def _get_memory_view():
     return _WASM_MEMORY
 
+# --- Wasm Exported Functions ---
+
+def export(name):
+    def decorator(func):
+        setattr(func, '_export_name', name)
+        return func
+    return decorator
+
+@export("conduit.processor.v1.malloc")
+def malloc(size: int) -> int:
+    """
+    Allocates a block of memory of a specific size for the host to use.
+    This is the actual exported function that Conduit will call.
+    """
+    return _malloc(size)
+
 def write_to_memory(data: bytes) -> int:
     """Writes bytes to memory, returns a packed ptr-size uint64."""
     size = len(data)
-    ptr = _malloc(size)
+    ptr = malloc(size)
     _get_memory_view()[ptr:ptr+size] = data
     return (ptr << 32) | size
 
@@ -63,12 +78,6 @@ class ProcessedRecord:
     def __init__(self, record=None, filter=False, error=None):
         self.record, self.filter, self.error = record, filter, error
 
-# --- Wasm Exported Functions ---
-def export(name):
-    def decorator(func):
-        setattr(func, '_export_name', name)
-        return func
-    return decorator
 
 @export("conduit.processor.v1.specification")
 def specification(packed_ptr: int) -> int:
@@ -103,7 +112,7 @@ def process(packed_ptr: int) -> int:
     req_bytes = read_from_memory(packed_ptr)
     request = processor_pb2.Process.Request()
     request.ParseFromString(req_bytes)
-    
+
     results = PROCESSOR.process(request.records)
 
     response = processor_pb2.Process.Response()
@@ -116,7 +125,7 @@ def process(packed_ptr: int) -> int:
         else: # ACK
             processed_record_proto.single_record.CopyFrom(res.record)
         response.records.append(processed_record_proto)
-        
+
     return write_to_memory(response.SerializeToString())
 
 @export("conduit.processor.v1.teardown")

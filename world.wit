@@ -1,0 +1,18 @@
+package conduit:processor@1.0.0;
+
+// This world defines the complete interface for a Conduit processor
+// that will be compiled to a Wasm component.
+world processor {
+  // The processor must export a memory allocator for the host to use.
+  // It takes a size and returns a pointer (represented as a 32-bit integer).
+  export "conduit.processor.v1.malloc": func(size: u32) -> u32;
+
+  // Each of the following functions represents a command from the host.
+  // They receive a packed 64-bit integer (pointer + size) and return one.
+  // This low-level signature matches the Go SDK's ABI.
+  export "conduit.processor.v1.specification": func(req-ptr-size: u64) -> u64;
+  export "conduit.processor.v1.configure": func(req-ptr-size: u64) -> u64;
+  export "conduit.processor.v1.open": func(req-ptr-size: u64) -> u64;
+  export "conduit.processor.v1.process": func(req-ptr-size: u64) -> u64;
+  export "conduit.processor.v1.teardown": func(req-ptr-size: u64) -> u64;
+}
